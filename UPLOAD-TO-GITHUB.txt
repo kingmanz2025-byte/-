@@ -1,0 +1,17 @@
+طريقة الرفع:
+1) فك ضغط هذا الملف.
+2) ارفع كل محتوياته إلى الـRepository، وليس ملف ZIP نفسه.
+3) يجب أن يكون index.html في جذر الـRepository.
+4) يجب الحفاظ على مجلدي .github و assets و js و css.
+5) بعد الرفع انتظر GitHub Pages حتى يعيد النشر.
+
+هيكل المشروع:
+index.html
+services.html
+request.html
+track.html
+admin.html
+css/
+js/
+assets/
+.github/workflows/

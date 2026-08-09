@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>لوحة الإدارة | خدمات التموين</title><link rel="stylesheet" href="css/style.css"></head>
+<body><div class="news-ticker"><div class="news-label">🔴 أخبار مصر</div><div class="news-viewport"><div id="newsTrack" class="news-track"></div></div></div><nav class="site-main-nav"><div class="nav-inner"><a class="brand-mini" href="index.html">🇪🇬 خدمات التموين</a><div class="nav-links"><a href="index.html">الرئيسية</a><div class="nav-dropdown"><a href="services.html" class="nav-services-link">الخدمات <span class="nav-chevron">⌄</span></a><div class="services-menu" aria-label="قائمة الخدمات"><a href="request.html?service=new-card">🪪 إصدار بطاقة جديدة</a><a href="request.html?service=add-wife">👩‍❤️‍👨 ضم الزوجة</a><a href="request.html?service=transfer">📍 نقل البطاقة</a><a href="request.html?service=damaged">🔄 بدل تالف</a><a href="request.html?service=lost">❓ بدل فاقد</a><a href="request.html?service=children">👨‍👩‍👧 ضم الأبناء</a><a href="services.html#update-data">🕒 تحديث البيانات <span class="soon-mini">قريبًا</span></a></div></div><a href="track.html">متابعة الطلب</a><a href="index.html#steps">كيف تعمل؟</a><a href="index.html#about">عن المنصة</a><a class="nav-cta" href="request.html">ابدأ طلبك</a></div></div></nav><main class="page"><div class="container">
+  <div id="loginPanel" class="auth-card">
+    <span class="eyebrow">منطقة خاصة</span><h1>لوحة الإدارة</h1><p>هذه الواجهة مخصصة لصاحب الخدمة فقط.</p>
+    <input id="adminEmail" type="email" placeholder="البريد الإلكتروني" autocomplete="username">
+    <input id="adminPassword" type="password" placeholder="كلمة المرور" autocomplete="current-password">
+    <button id="loginBtn" class="btn btn-primary btn-full">دخول</button>
+    <div id="loginMsg" class="form-message"></div>
+  </div>
+  <div id="dashboard" class="hidden">
+    <div class="dashboard-head"><div><span class="eyebrow">لوحة التحكم</span><h1>الطلبات</h1></div><button id="logoutBtn" class="btn btn-outline">تسجيل الخروج</button></div>
+    <div id="stats" class="stats"></div>
+    <div class="toolbar"><input id="searchOrders" placeholder="بحث برقم الطلب أو الاسم أو الهاتف"><select id="statusFilter"><option value="">كل الحالات</option><option value="new">جديد</option><option value="reviewing">قيد المراجعة</option><option value="completed">مكتمل</option><option value="rejected">مرفوض</option></select></div>
+    <div class="table-wrap"><table><thead><tr><th>رقم الطلب</th><th>الخدمة</th><th>الاسم</th><th>المحافظة</th><th>التاريخ</th><th>الحالة</th><th></th></tr></thead><tbody id="ordersBody"></tbody></table></div>
+    <div id="orderDetails" class="modal hidden"><div class="modal-box"><button id="closeModal" class="modal-close">×</button><div id="detailsContent"></div></div></div>
+  </div>
+</div></main>
+<script src="js/config.js"></script><script src="js/location-data.js"></script><script src="js/app.js"></script><script src="js/admin.js"></script>
+
+
+
+<div class="music-player" id="musicPlayer"><button id="musicToggle" class="music-toggle" type="button">▶</button><div class="music-meta"><strong>الموسيقى</strong><span id="musicState">جارٍ التشغيل</span></div><audio id="siteMusic" preload="auto" loop><source src="assets/music.mp3" type="audio/mpeg"></audio></div><script src="js/music.js"></script><script src="js/news.js"></script><script src="js/site-info.js"></script><button class="chatbot-launch" id="chatbotLaunch" aria-label="افتح مساعد خدمات التموين" aria-expanded="false"><span class="bot-avatar" aria-hidden="true">🤖</span><span class="bot-pulse"></span></button><section class="chatbot-panel" id="chatbotPanel"><div class="chatbot-head"><div class="chatbot-title"><span class="chatbot-mini-avatar">🤖</span><div><strong>مساعد خدمات التموين</strong><small>اسألني، وأنا معاك</small></div></div><button id="chatbotClose" type="button">×</button></div><div id="chatbotMessages" class="chatbot-messages"></div><form id="chatbotForm" class="chatbot-form"><input id="chatbotInput" placeholder="اكتب سؤالك..." autocomplete="off"><button type="submit">إرسال</button></form></section><script src="js/chatbot.js"></script><script src="js/announcement.js"></script><script src="js/site-nav.js"></script></body></html>
