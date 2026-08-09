@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{const x=document.createElement("div");x.className="site-announcement";x.innerHTML="📢 <b>قريبًا:</b> خدمة تحديث بيانات بطاقة التموين لمن تم حذفهم من التموين.";document.querySelector(".site-main-nav")?.insertAdjacentElement("afterend",x)})
