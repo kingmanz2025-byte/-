@@ -1,0 +1,89 @@
+name: Update Egypt News
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch and build news feed
+        env:
+          NEWS_URLS: |
+            https://news.google.com/rss/search?q=%D9%85%D8%B5%D8%B1&hl=ar&gl=EG&ceid=EG:ar
+            https://news.google.com/rss/search?q=%D8%A7%D9%82%D8%AA%D8%B5%D8%A7%D8%AF+%D9%85%D8%B5%D8%B1&hl=ar&gl=EG&ceid=EG:ar
+            https://news.google.com/rss/search?q=%D8%B1%D9%8A%D8%A7%D8%B6%D8%A9+%D9%85%D8%B5%D8%B1&hl=ar&gl=EG&ceid=EG:ar
+            https://news.google.com/rss/search?q=%D8%AA%D9%85%D9%88%D9%8A%D9%86+%D9%85%D8%B5%D8%B1&hl=ar&gl=EG&ceid=EG:ar
+            https://www.masrawy.com/Rss
+            https://www.youm7.com/rss/rss
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request, xml.etree.ElementTree as ET
+          from datetime import datetime, timezone
+          from html import unescape
+          from email.utils import parsedate_to_datetime
+
+          urls = [u.strip() for u in os.environ['NEWS_URLS'].splitlines() if u.strip()]
+          items=[]
+          seen=set()
+          headers={'User-Agent':'Mozilla/5.0 (compatible; TamweenNewsBot/1.0)'}
+
+          def clean(s):
+              return ' '.join(unescape(s or '').replace('\n',' ').split())
+
+          def parse_date(v):
+              if not v: return 0
+              try: return parsedate_to_datetime(v).timestamp()
+              except Exception: return 0
+
+          for url in urls:
+              try:
+                  req=urllib.request.Request(url,headers=headers)
+                  data=urllib.request.urlopen(req,timeout=15).read()
+                  root=ET.fromstring(data)
+                  for node in root.findall('.//item')[:30]:
+                      title=clean(node.findtext('title'))
+                      link=clean(node.findtext('link'))
+                      desc=clean(node.findtext('description'))
+                      pub=clean(node.findtext('pubDate'))
+                      if not title or not link: continue
+                      key=title.lower()
+                      if key in seen: continue
+                      seen.add(key)
+                      source='أخبار مصر'
+                      if 'masrawy' in url: source='مصراوي'
+                      elif 'youm7' in url: source='اليوم السابع'
+                      category='عام'
+                      low=title.lower()
+                      if any(x in low for x in ['اقتصاد','أسعار','بنك','ذهب','دولار','استثمار']): category='اقتصاد'
+                      elif any(x in low for x in ['الأهلي','الزمالك','منتخب','الدوري','كرة','رياضة']): category='رياضة'
+                      elif any(x in low for x in ['تموين','دعم','بطاقة','رغيف']): category='تموين'
+                      items.append({'title':title,'source':source,'link':link,'category':category,'description':desc,'pubDate':pub,'_ts':parse_date(pub)})
+              except Exception as e:
+                  print('feed failed',url,e)
+
+          items.sort(key=lambda x:x['_ts'],reverse=True)
+          items=items[:40]
+          for x in items: x.pop('_ts',None)
+          out={'updatedAt':datetime.now(timezone.utc).isoformat(),'items':items}
+          os.makedirs('assets',exist_ok=True)
+          with open('assets/news.json','w',encoding='utf-8') as f:
+              json.dump(out,f,ensure_ascii=False,indent=2)
+          print('news items:',len(items))
+          PY
+
+      - name: Commit updated news
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/news.json
+          git diff --cached --quiet || git commit -m "chore: update Egypt news"
+          git push
