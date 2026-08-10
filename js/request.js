@@ -120,16 +120,29 @@ document.addEventListener("DOMContentLoaded",()=>{
       phone:$("phone").value.trim(),
       husbandPhone:husbandPhone?.value.trim()||"",
       nationalId:$("nationalId").value.trim(),
+      cardNumber:$("cardNumber")?.value.trim()||"",
+      notes:$("notes")?.value.trim()||"",
+      demoFiles: Array.from(document.querySelectorAll('input[type="file"]')).flatMap(input=>Array.from(input.files||[]).map(f=>({name:f.name,size:f.size,type:f.type}))),
       governorate:$("governorate").value.trim(),
       area:$("area").value==="__other__"?($("otherArea")?.value.trim()||"أخرى / غير مدرجة"):$("area").value.trim(),
       createdAt:new Date().toISOString(),
       status:"new"
     };
 
-    const all=JSON.parse(localStorage.getItem("tamween_orders")||"[]");
+    // حفظ الطلب محليًا ليكون متاحًا في صفحة المتابعة والأدمن على نفس الجهاز/المتصفح.
+    let all=[];
+    try {
+      all=JSON.parse(localStorage.getItem("tamween_orders")||"[]");
+      if(!Array.isArray(all)) all=[];
+    } catch(err) {
+      showMessage($("formMessage"),"تعذر حفظ الطلب محليًا. شغّل الموقع عبر Live Server ثم حاول مرة أخرى.","error");
+      return;
+    }
+
     all.unshift(order);
     localStorage.setItem("tamween_orders",JSON.stringify(all));
     localStorage.setItem("last_order_id",order.id);
-    showMessage($("formMessage"),`تم تسجيل الطلب تجريبيًا. رقم الطلب: ${order.id}`,"success");
-  });
+    localStorage.setItem("last_order",JSON.stringify(order));
+
+    showMessage($("formMessage"),`تم تسجيل الطلب محليًا بنجاح. رقم الطلب: ${order.id}`,"success");  });
 });

@@ -110,19 +110,42 @@ function setupLocationPicker(){
 
   function smartFind(value){
     const q=norm(value);if(!q)return;
-    const govExact=findGov(q);
+
+    // 1) Exact governorate name always wins when the user typed a governorate.
+    const govExact=govs.find(x=>norm(x)===q);
     if(govExact){
       g.value=govExact;fillAreas(govExact);
       return;
     }
 
-    const aliasGov=aliases[q];
+    // 2) Exact area match MUST be checked before aliases.
+    // This fixes cases such as "فيصل": it is an area in Giza, not just
+    // an alias that points to the governorate.
     const exact=all.filter(x=>norm(x.area)===q);
+    if(exact.length){
+      const aliasGov=aliases[q];
+      const chosen=aliasGov?exact.find(x=>x.gov===aliasGov)||exact[0]:exact[0];
+      g.value=chosen.gov;
+      fillAreas(chosen.gov,"",chosen.area);
+      return;
+    }
+
+    // 3) Known aliases (useful for short/common spellings).
+    const aliasGov=aliases[q];
+    if(aliasGov){
+      g.value=aliasGov;
+      const aliasArea=all.find(x=>x.gov===aliasGov && norm(x.area)===q);
+      fillAreas(aliasGov,"",aliasArea?.area||"");
+      return;
+    }
+
+    // 4) Partial/prefix search for first letters or incomplete names.
     const pref=all.filter(x=>norm(x.area).startsWith(q));
-    const candidates=exact.length?exact:pref;
-    if(candidates.length){
-      const chosen=aliasGov?candidates.find(x=>x.gov===aliasGov)||candidates[0]:candidates[0];
-      g.value=chosen.gov;fillAreas(chosen.gov,"",chosen.area);return;
+    if(pref.length){
+      const chosen=pref[0];
+      g.value=chosen.gov;
+      fillAreas(chosen.gov,"",chosen.area);
+      return;
     }
 
     // If the user clearly typed a region but it isn't in our dataset,

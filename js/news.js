@@ -63,12 +63,13 @@
   let ticker={x:0,half:0,last:0,paused:false,raf:0};
   function startTicker(viewport,track){
     cancelAnimationFrame(ticker.raf);
-    ticker={x:0,half:0,last:performance.now(),paused:false,raf:0};
+    ticker={x:0,half:0,last:performance.now(),paused:false,raf:0,saveAt:0};
+    const savedPhase=Math.max(0,Math.min(1,Number(localStorage.getItem('tamween_news_phase')||0)));
     const measure=()=>{
       ticker.half=track.scrollWidth/2;
       if(ticker.half){
-        // Start at the right edge of the first copy so the first visible motion is left -> right.
-        ticker.x=-ticker.half;
+        // Resume from the last position instead of restarting when navigating between pages.
+        ticker.x=-(savedPhase*ticker.half);
         track.style.setProperty('transform',`translate3d(${ticker.x}px,0,0)`,'important');
       }
     };
@@ -84,6 +85,12 @@
         ticker.x+=36*dt/1000;
         if(ticker.x>=0)ticker.x=-ticker.half;
         track.style.setProperty('transform',`translate3d(${ticker.x}px,0,0)`,'important');
+      }
+      // Save the current position so opening another page continues from here.
+      if(now-ticker.saveAt>1000 && ticker.half){
+        const phase=Math.max(0,Math.min(1,(-ticker.x)/ticker.half));
+        localStorage.setItem('tamween_news_phase',String(phase));
+        ticker.saveAt=now;
       }
       ticker.raf=requestAnimationFrame(tick);
     };

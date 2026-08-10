@@ -1,6 +1,6 @@
 const loginPanel=document.getElementById("loginPanel"), dashboard=document.getElementById("dashboard");
-const ADMIN_EMAIL="admin@example.com"; // غيّر هذا في وضع التجربة فقط.
-const ADMIN_PASSWORD="123456"; // غيّر هذا في وضع التجربة فقط.
+const ADMIN_USERNAME="Mohamed";
+const ADMIN_PASSWORD="Med@7111992";
 let orders=[];
 
 function loggedIn(){return sessionStorage.getItem("tamween_admin")==="1";}
@@ -40,8 +40,8 @@ function showDetails(id){
   document.getElementById("orderDetails").classList.remove("hidden");
 }
 document.getElementById("loginBtn").onclick=()=>{
-  const e=document.getElementById("adminEmail").value,p=document.getElementById("adminPassword").value;
-  if(e===ADMIN_EMAIL&&p===ADMIN_PASSWORD){sessionStorage.setItem("tamween_admin","1");showDash();}
+  const e=document.getElementById("adminUsername").value,p=document.getElementById("adminPassword").value;
+  if(e===ADMIN_USERNAME&&p===ADMIN_PASSWORD){sessionStorage.setItem("tamween_admin","1");showDash();}
   else showMessage(document.getElementById("loginMsg"),"بيانات الدخول غير صحيحة.","error");
 };
 document.getElementById("logoutBtn").onclick=()=>{sessionStorage.removeItem("tamween_admin");location.reload();};
