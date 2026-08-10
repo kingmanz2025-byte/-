@@ -40,3 +40,14 @@
 - Fixed duplicate `GOVERNORATES` declaration that prevented `app.js` from running; services now render again.
 - Fixed news ticker animation conflict; news now moves slowly, pauses on hover, and news items are clickable.
 - Added Egypt live clock, Gregorian date, Hijri date, and a shared visitor counter.
+
+
+## بيانات دخول الإدارة
+- اسم المستخدم: `Mohamed`
+- كلمة المرور: `Med@7111992`
+- الدخول من زر **🔐 الإدارة** في الـNavbar أو مباشرة من `admin.html`.
+
+> ملاحظة: هذه حماية واجهة Front-end فقط، وليست نظام مصادقة آمنًا لبيانات حساسة على GitHub Pages.
+
+
+V24: متابعة الطلبات تستخدم localStorage محليًا. للاختبار المحلي الموثوق استخدم Live Server/localhost بدل فتح الملفات مباشرة بـ file://.
