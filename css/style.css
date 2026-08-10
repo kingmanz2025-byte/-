@@ -141,3 +141,18 @@ body{padding-top:var(--header-total)!important}
 .site-main-nav .nav-dropdown{z-index:2147483005!important}
 .services-menu{z-index:2147483006!important}
 @media(max-width:700px){.site-main-nav .nav-links{overflow-x:auto!important;overflow-y:visible!important}.site-main-nav .nav-dropdown{position:static!important}.services-menu{z-index:2147483006!important}}
+
+/* ADMIN ACCESS */
+.site-main-nav { overflow: visible !important; }
+.nav-inner, .nav-links, .nav-dropdown { overflow: visible !important; }
+.admin-login-link {
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  padding:9px 13px; border-radius:10px;
+  color:#fff !important; text-decoration:none !important;
+  background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.20);
+  font-weight:700; white-space:nowrap; transition:.2s ease;
+}
+.admin-login-link:hover { background:rgba(255,255,255,.18); transform:translateY(-1px); }
+@media (max-width:700px){
+  .admin-login-link { padding:8px 10px; font-size:13px; }
+}
